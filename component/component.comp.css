@@ -1,0 +1,21 @@
+a {
+    text-decoration: underline dashed #d3d3d3;
+    color: #d3d3d3;
+}
+
+hr {
+    /* margin: 20px 0; */
+    border: 1px solid #323232;
+}
+
+.bg-comp {
+    display: block;
+    box-shadow: 0 0 10px black;
+    background-color: #202020;
+    margin: 20px;
+    padding: 20px;
+}
+
+.clickable {
+    cursor: pointer;
+}
