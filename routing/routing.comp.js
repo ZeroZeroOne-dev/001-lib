@@ -14,7 +14,7 @@ export class RoutingComponent extends Component {
     }
 
     #checkRoute() {
-        this.container.replaceChildren();
+        this.root.replaceChildren();
 
         for (const routeKey in RoutingComponent.#RouteMap) {
             const regExp = new RegExp(routeKey);
@@ -39,7 +39,7 @@ export class RoutingComponent extends Component {
                 instance = new type();
             }
 
-            this.container.appendChild(instance);
+            this.root.appendChild(instance);
             break;
         }
     }

@@ -4,7 +4,7 @@ export class Component extends HTMLElement {
     #templatePath;
 
     /** @type {HTMLDivElement} */
-    #container;
+    #root;
 
     constructor({
         styleSheet = undefined,
@@ -41,13 +41,14 @@ export class Component extends HTMLElement {
     async #makeContainer() {
         this.#setStyleSheet();
 
-        this.#container = document.createElement('div');
-        this.#shadow.appendChild(this.#container);
+        this.#root = document.createElement('div');
+        this.#root.classList.add('root')
+        this.#shadow.appendChild(this.#root);
 
         if (this.#templatePath !== undefined) {
             const response = await fetch(this.#templatePath);
             const template = await response.text();
-            this.#container.innerHTML += template;
+            this.#root.innerHTML += template;
         }
 
         setTimeout(() => {
@@ -55,13 +56,13 @@ export class Component extends HTMLElement {
         }, 0);
     }
 
-    get container() {
-        return this.#container
+    get root() {
+        return this.#root
     }
 
     /** @returns {HTMLElement} */
     getChild(selector) {
-        return this.#container.querySelector(selector);
+        return this.#root.querySelector(selector);
     }
 
     init() { }
