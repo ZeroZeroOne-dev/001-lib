@@ -1,8 +1,9 @@
 import { Component } from "../component/component.comp.js";
+import { RouteMatchedEvent } from "./routing.events.js";
 
 export class RoutingComponent extends Component {
 
-    static #RouteMap = {};
+    #routeMap = {};
 
     constructor() {
         super();
@@ -16,14 +17,14 @@ export class RoutingComponent extends Component {
     #checkRoute() {
         this.root.replaceChildren();
 
-        for (const routeKey in RoutingComponent.#RouteMap) {
+        for (const routeKey in this.#routeMap) {
             const regExp = new RegExp(routeKey);
             const matches = window.location.hash.match(regExp);
             if (!matches || matches.length < 1) {
                 continue;
             }
 
-            const routeInfo = RoutingComponent.#RouteMap[routeKey];
+            const routeInfo = this.#routeMap[routeKey];
             if (routeInfo.redirect) {
                 window.location.hash = routeInfo.redirect;
                 break;
@@ -40,12 +41,16 @@ export class RoutingComponent extends Component {
             }
 
             this.root.appendChild(instance);
+
+            this.dispatchEvent(new RouteMatchedEvent(routeInfo));
+
             break;
         }
     }
 
-    static setRouteMap(map) {
-        this.#RouteMap = map;
+    setRouteMap(map) {
+        this.#routeMap = map;
+        this.#checkRoute();
     }
 
 }
