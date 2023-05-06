@@ -39,6 +39,8 @@ export class Component extends HTMLElement {
     }
 
     async #makeContainer() {
+        this.beforeAppend();
+
         this.#setStyleSheet();
 
         this.#root = document.createElement('div');
@@ -66,4 +68,6 @@ export class Component extends HTMLElement {
     }
 
     init() { }
+
+    beforeAppend() { }
 }

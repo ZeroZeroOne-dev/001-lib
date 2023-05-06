@@ -33,16 +33,17 @@ export class RoutingComponent extends Component {
             const type = routeInfo.component;
             var instance;
 
+            var params;
             if (routeInfo.params) {
-                const data = routeInfo.params(matches);
-                instance = new type(...data);
+                params = routeInfo.params(matches);
+                instance = new type(...params);
             } else {
                 instance = new type();
             }
 
             this.root.appendChild(instance);
 
-            this.dispatchEvent(new RouteMatchedEvent(routeInfo));
+            this.dispatchEvent(new RouteMatchedEvent(routeInfo, params));
 
             break;
         }
