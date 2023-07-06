@@ -1,20 +1,20 @@
 export class Component extends HTMLElement {
     #shadow;
-    #styleSheetPath;
+    #styleSheetPaths;
     #templatePath;
 
     /** @type {HTMLDivElement} */
     #container;
 
-    constructor({
-        styleSheet = undefined,
-        template = undefined
-    } = {}) {
+    /**
+     * @param {{styleSheets: string[], template: string,}} myObj description
+     */
+    constructor({ styleSheets = undefined, template = undefined } = {}) {
         super();
 
-        this.#shadow = this.attachShadow({ mode: 'open' });
+        this.#shadow = this.attachShadow({ mode: "open" });
 
-        this.#styleSheetPath = styleSheet;
+        this.#styleSheetPaths = styleSheets;
         this.#templatePath = template;
         this.#makeContainer();
     }
@@ -22,18 +22,23 @@ export class Component extends HTMLElement {
     #setStyleSheet() {
         let imports;
 
-        if (this.#styleSheetPath == undefined) {
+        if (
+            this.#styleSheetPaths == undefined ||
+            this.#styleSheetPaths.length === 0
+        ) {
             imports = `
                 @import '/001-lib/component/component.comp.css';
             `;
         } else {
+           const sheets = this.#styleSheetPaths.map(s => `@import '${s}'`).join(';\r\n');
+
             imports = `
                 @import '/001-lib/component/component.comp.css';
-                @import '${this.#styleSheetPath}';
+                ${sheets}
             `;
         }
 
-        const style = document.createElement('style');
+        const style = document.createElement("style");
         style.innerHTML = imports;
         this.#shadow.appendChild(style);
     }
@@ -41,7 +46,7 @@ export class Component extends HTMLElement {
     async #makeContainer() {
         this.#setStyleSheet();
 
-        this.#container = document.createElement('div');
+        this.#container = document.createElement("div");
         this.#shadow.appendChild(this.#container);
 
         if (this.#templatePath !== undefined) {
@@ -56,7 +61,7 @@ export class Component extends HTMLElement {
     }
 
     get container() {
-        return this.#container
+        return this.#container;
     }
 
     /** @returns {HTMLElement} */
@@ -64,5 +69,5 @@ export class Component extends HTMLElement {
         return this.#container.querySelector(selector);
     }
 
-    init() { }
+    init() {}
 }
