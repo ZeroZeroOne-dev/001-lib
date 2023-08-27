@@ -27,13 +27,13 @@ export class Component extends HTMLElement {
             this.#styleSheetPaths.length === 0
         ) {
             imports = `
-                @import '/001-lib/component/component.comp.css';
+                @import '001-lib/component/component.comp.css';
             `;
         } else {
            const sheets = this.#styleSheetPaths.map(s => `@import '${s}'`).join(';\r\n');
 
             imports = `
-                @import '/001-lib/component/component.comp.css';
+                @import '001-lib/component/component.comp.css';
                 ${sheets}
             `;
         }
