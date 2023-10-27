@@ -4,13 +4,12 @@ import { RouteMatchedEvent } from "./routing.events.js";
 export class RoutingComponent extends Component {
 
     #routeMap = {};
-
-    constructor() {
-        super();
-    }
+    hashRouting = true;
+    subPath = undefined;
 
     init() {
-        this.routeChangeEvent = window.addEventListener('hashchange', () => this.#checkRoute());
+        this.hasChangeEvent = window.addEventListener('hashchange', () => this.#checkRoute());
+        this.routeLinkClickedEvent = window.addEventListener('zzo-a-clicked', () => this.#checkRoute());
         this.#checkRoute();
     }
 
@@ -18,8 +17,11 @@ export class RoutingComponent extends Component {
         this.root.replaceChildren();
 
         for (const routeKey in this.#routeMap) {
+            let toTest = this.hashRouting ? window.location.hash : window.location.pathname;
+            toTest = this.subPath === undefined ? toTest : toTest.substring(this.subPath.length, toTest.length);
+
             const regExp = new RegExp(routeKey);
-            const matches = window.location.hash.match(regExp);
+            const matches = toTest.match(regExp);
             if (!matches || matches.length < 1) {
                 continue;
             }
@@ -55,4 +57,4 @@ export class RoutingComponent extends Component {
     }
 
 }
-customElements.define('lib-routing-001', RoutingComponent);
+customElements.define('zzo-routing', RoutingComponent);
